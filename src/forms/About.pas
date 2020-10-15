@@ -34,11 +34,11 @@ Const
 procedure TfmAbout.FormCreate(Sender: TObject);
 begin
   inherited;
-  sgInfo.Cells[0,0] := 'Версия';
+  sgInfo.Cells[0,0] := 'Version';
   sgInfo.Cells[1,0] := '1.0';
-  sgInfo.Cells[0,1] := 'Автор';
-  sgInfo.Cells[1,1] := 'Воронов Николай';
-  sgInfo.Cells[0,2] := 'Сайт';
+  sgInfo.Cells[0,1] := 'Author';
+  sgInfo.Cells[1,1] := 'Nikolay Voronov';
+  sgInfo.Cells[0,2] := 'Web';
   sgInfo.Cells[1,2] := '';
   sgInfo.Selection  := NoSelection;
 end;

@@ -80,13 +80,13 @@ begin
 
   sk.IsCtrl := true; sk.IsAlt := false; sk.IsShift := false;
   sk.Key := 69; // 'E'
-  AddFuncItem('Выполнить SQL', _FuncExecSQL, sk);
-  AddFuncItem('Показать обозреватель БД', _FuncDBBrowser);
-  AddFuncItem('Паказать панель результата', _FuncSqlResult);
+  AddFuncItem('Execute SQL', _FuncExecSQL, sk);
+  AddFuncItem('Show BD Browser', _FuncDBBrowser);
+  AddFuncItem('Show Result', _FuncSqlResult);
   AddFuncItem('-', nil);
-  AddFuncItem('Настройки ...', _FuncSettings);
+  AddFuncItem('Settings ...', _FuncSettings);
   AddFuncItem('-', nil);
-  AddFuncItem('О плагине ...', _FuncAbout);
+  AddFuncItem('About ...', _FuncAbout);
 end;
 
 procedure TDBconPlugin.FuncExecSQL;

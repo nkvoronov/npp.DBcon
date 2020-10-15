@@ -24,6 +24,7 @@ type
     tsMain: TTabSheet;
     btCancel: TButton;
     btOk: TButton;
+    tsConnection: TTabSheet;
   private
     { Private declarations }
   public

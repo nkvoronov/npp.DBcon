@@ -22,8 +22,11 @@ uses
   Vcl.ComCtrls,
   ZAbstractConnection,
   ZConnection,
+  ZSqlMonitor,
+  System.ImageList,
+  Vcl.ImgList,
   NppDockingForms,
-  NppPlugin, ZSqlMonitor;
+  NppPlugin;
 
 type
   TfmSQLResult = class(TNppDockingForm)
@@ -33,9 +36,10 @@ type
     mmMessages: TMemo;
     dsResult: TDataSource;
     qResult: TZQuery;
-    dbgResult: TDBGrid;
     Connection: TZConnection;
     Monitor: TZSQLMonitor;
+    ilResult: TImageList;
+    dbgResult: TDBGrid;
     procedure FormCreate(Sender: TObject);
     procedure MonitorLogTrace(Sender: TObject; Event: TZLoggingEvent);
     procedure FormDestroy(Sender: TObject);

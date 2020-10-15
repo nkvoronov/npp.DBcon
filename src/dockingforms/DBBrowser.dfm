@@ -1,7 +1,7 @@
 object fmDBBrowser: TfmDBBrowser
   Left = 0
   Top = 0
-  Caption = ' '#1054#1073#1086#1079#1088#1077#1074#1072#1090#1077#1083#1100' '#1041#1044
+  Caption = 'BD Browser'
   ClientHeight = 299
   ClientWidth = 635
   Color = clBtnFace

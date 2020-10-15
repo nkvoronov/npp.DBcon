@@ -3,7 +3,7 @@ object fmSettings: TfmSettings
   Top = 0
   ActiveControl = btCancel
   BorderStyle = bsDialog
-  Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080' npp.DBcon'
+  Caption = 'Settings npp.DBcon'
   ClientHeight = 222
   ClientWidth = 351
   Color = clBtnFace
@@ -34,7 +34,6 @@ object fmSettings: TfmSettings
       Caption = #1054#1090#1084#1077#1085#1072
       ModalResult = 2
       TabOrder = 1
-      ExplicitLeft = 173
     end
     object btOk: TButton
       AlignWithMargins = True
@@ -46,9 +45,6 @@ object fmSettings: TfmSettings
       Caption = 'Ok'
       ModalResult = 1
       TabOrder = 0
-      ExplicitLeft = 279
-      ExplicitTop = 2
-      ExplicitHeight = 41
     end
   end
   object pcSettings: TPageControl
@@ -59,13 +55,12 @@ object fmSettings: TfmSettings
     ActivePage = tsMain
     Align = alClient
     TabOrder = 0
-    ExplicitTop = -3
     object tsMain: TTabSheet
-      Caption = #1054#1089#1085#1086#1074#1085#1099#1077
-      ExplicitLeft = 8
-      ExplicitTop = 22
-      ExplicitWidth = 397
-      ExplicitHeight = 186
+      Caption = 'Main'
+    end
+    object tsConnection: TTabSheet
+      Caption = 'Connection'
+      ImageIndex = 1
     end
   end
 end
