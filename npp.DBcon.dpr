@@ -26,7 +26,11 @@ uses
   About in 'src\forms\About.pas' {fmAbout},
   Settings in 'src\forms\Settings.pas' {fmSettings},
   SqlResult in 'src\dockingforms\SqlResult.pas' {fmSQLResult},
-  DBBrowser in 'src\dockingforms\DBBrowser.pas' {fmDBBrowser};
+  DBBrowser in 'src\dockingforms\DBBrowser.pas' {fmDBBrowser},
+  common in 'src\common.pas',
+  View in 'src\forms\View.pas' {fmView},
+  Select in 'src\forms\Select.pas' {fmSelect},
+  EditConnect in 'src\forms\EditConnect.pas' {fmEditConnect};
 
 {$R *.res}
 

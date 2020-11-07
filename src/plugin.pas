@@ -32,6 +32,7 @@ type
 
 const
   cnstMainDlgId = 0;
+  PluginName = 'npp.DBcon';
 
 procedure _FuncExecSQL; cdecl;
 procedure _FuncDBBrowser; cdecl;
@@ -107,7 +108,6 @@ begin
     if not Assigned(FFormResult) then
     begin
       FuncSqlResult;
-      TfmSQLResult(FFormResult).DoConnect;
     end;
 
     if TfmSQLResult(FFormResult).MenuItemCheck = miHidden then

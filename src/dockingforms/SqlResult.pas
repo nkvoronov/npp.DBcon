@@ -25,6 +25,10 @@ uses
   ZSqlMonitor,
   System.ImageList,
   Vcl.ImgList,
+  JvExDBGrids,
+  JvDBGrid,
+  JvDBUltimGrid,
+  ZSqlProcessor,
   NppDockingForms,
   NppPlugin;
 
@@ -39,18 +43,22 @@ type
     Connection: TZConnection;
     Monitor: TZSQLMonitor;
     ilResult: TImageList;
-    dbgResult: TDBGrid;
+    JvDBUltimGrid1: TJvDBUltimGrid;
+    SQLProcessor: TZSQLProcessor;
     procedure FormCreate(Sender: TObject);
-    procedure MonitorLogTrace(Sender: TObject; Event: TZLoggingEvent);
     procedure FormDestroy(Sender: TObject);
+    procedure MonitorLogTrace(Sender: TObject; Event: TZLoggingEvent);
   private
     FSQLText: string;
+    FShowSelect: Boolean;
+    FStartDefCon: Boolean;
+    FCon: TStringList;
     FMenuItemCheck: TMenuItemCheck;
     procedure SetMenuItemCheck(const Value: TMenuItemCheck);
+    procedure LoadSettings;
   public
-    procedure SelItem;
     procedure DoSql(const SqlText: string);
-    procedure DoConnect;
+    procedure SelItem;
     property MenuItemCheck: TMenuItemCheck read FMenuItemCheck write SetMenuItemCheck;
   end;
 
@@ -58,18 +66,33 @@ implementation
 
 {$R *.dfm}
 
+uses
+  common,
+  Select;
+
 { TfmSQLResult }
 
-procedure TfmSQLResult.DoConnect;
-begin
-  //
-end;
-
 procedure TfmSQLResult.DoSql(const SqlText: string);
+var
+  index : integer;
+  Select : TfmSelect;
 begin
+  LoadSettings;
   FSQLText := SqlText;
+  if FShowSelect then
+  begin
+    Select := TfmSelect.Create(self);
+    try
+      if Select.ShowModal = mrOK then
+      begin
+        index := Select.lbConnections.ItemIndex;
+      end;
+    finally
+      Select.Free;
+    end;
+  end;
+  DoConnect(Connection, GetConnection(FCon, not FShowSelect, index));
   mmMessages.Lines.Clear;
-  qResult.Close;
   qResult.SQL.Text := FSQLText;
   qResult.Open;
   pcSQLResult.ActivePageIndex := 0;
@@ -78,32 +101,33 @@ end;
 procedure TfmSQLResult.FormCreate(Sender: TObject);
 begin
   FSQLText := '';
+  FShowSelect := false;
+  FStartDefCon := false;
   pcSQLResult.ActivePageIndex := 0;
-  try
-    Connection.Connect;
-    Monitor.Active := true;
-  finally
-    //
-  end;
+  FCon := TStringList.Create;
+  LoadSettings;
+  if FStartDefCon then
+    DoConnect(Connection, GetConnection(FCon, true, 0));
 end;
 
 procedure TfmSQLResult.FormDestroy(Sender: TObject);
 begin
-  try
-    if Connection.Connected then
-    begin
-      qResult.Close;
-      Connection.Disconnect;
-    end;
-  finally
-    //
-  end;
+  ClearListConnection(FCon);
+  FCon.Free;
+  DoDisconnect(Connection);
+end;
 
+procedure TfmSQLResult.LoadSettings;
+begin
+  FShowSelect := INI.ReadBool('Main', 'ShowListConnections', false);
+  FStartDefCon := INI.ReadBool('Main', 'StartDefaultConnection', false);
+  FCon.Clear;
+  FCon.AddStrings(LoadConnection);
 end;
 
 procedure TfmSQLResult.MonitorLogTrace(Sender: TObject; Event: TZLoggingEvent);
 begin
-  mmMessages.Lines.Add(Event.Message);
+  mmMessages.Lines.Add(DateTimeToStr(Event.Timestamp) + ' : ' + Event.Message);
 end;
 
 procedure TfmSQLResult.SelItem;

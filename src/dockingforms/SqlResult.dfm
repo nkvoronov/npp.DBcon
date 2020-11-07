@@ -1,8 +1,8 @@
 object fmSQLResult: TfmSQLResult
   Left = 0
   Top = 0
-  Caption = 'Result'
-  ClientHeight = 298
+  Caption = '  Result'
+  ClientHeight = 301
   ClientWidth = 633
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -44,7 +44,7 @@ object fmSQLResult: TfmSQLResult
     Left = 0
     Top = 0
     Width = 633
-    Height = 298
+    Height = 301
     ActivePage = tsResult
     Align = alClient
     HotTrack = True
@@ -54,30 +54,43 @@ object fmSQLResult: TfmSQLResult
     object tsResult: TTabSheet
       BorderWidth = 1
       Caption = 'Result'
-      object dbgResult: TDBGrid
-        Left = 0
-        Top = 0
-        Width = 623
-        Height = 267
+      object JvDBUltimGrid1: TJvDBUltimGrid
+        AlignWithMargins = True
+        Left = 3
+        Top = 3
+        Width = 617
+        Height = 264
         Align = alClient
+        Ctl3D = True
         DataSource = dsResult
-        Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgTitleClick, dgTitleHotTrack]
+        Options = [dgTitles, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgTitleHotTrack]
+        ParentCtl3D = False
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
         TitleFont.Name = 'Tahoma'
         TitleFont.Style = []
+        SelectColumnsDialogStrings.Caption = 'Select columns'
+        SelectColumnsDialogStrings.OK = '&OK'
+        SelectColumnsDialogStrings.NoSelectionWarning = 'At least one column must be visible!'
+        CanDelete = False
+        EditControls = <>
+        RowsHeight = 17
+        TitleRowHeight = 17
+        WordWrap = True
+        WordWrapAllFields = True
       end
     end
     object tsMessages: TTabSheet
       Caption = 'Messages'
       ImageIndex = 1
       object mmMessages: TMemo
-        Left = 0
-        Top = 0
-        Width = 625
-        Height = 269
+        AlignWithMargins = True
+        Left = 3
+        Top = 3
+        Width = 619
+        Height = 266
         Align = alClient
         BevelInner = bvNone
         BevelOuter = bvNone
@@ -98,11 +111,6 @@ object fmSQLResult: TfmSQLResult
   end
   object qResult: TZQuery
     Connection = Connection
-    SQL.Strings = (
-      'select'
-      '*'
-      'from'
-      'ActInspect')
     Params = <>
     Left = 92
     Top = 222
@@ -111,15 +119,15 @@ object fmSQLResult: TfmSQLResult
     ControlsCodePage = cCP_UTF16
     AutoEncodeStrings = True
     Catalog = ''
+    Properties.Strings = (
+      'controls_cp=CP_UTF16')
     SQLHourGlass = True
     HostName = ''
     Port = 0
-    Database = 
-      'Provider=SQLOLEDB.1;Password=1111;Persist Security Info=True;Use' +
-      'r ID=sa;Initial Catalog=Doors;Data Source=10.75.1.107'
+    Database = ''
     User = ''
     Password = ''
-    Protocol = 'ado'
+    Protocol = ''
     Left = 156
     Top = 224
   end
@@ -130,10 +138,10 @@ object fmSQLResult: TfmSQLResult
     Top = 224
   end
   object ilResult: TImageList
-    Left = 303
-    Top = 227
+    Left = 300
+    Top = 225
     Bitmap = {
-      494C010102000800140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101020008003C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -271,5 +279,13 @@ object fmSQLResult: TfmSQLResult
       0813E0FF000000000821EEFF00000000FFFFEEFF00000000FFFFEEFF00000000
       FFFFFFFF00000000FFFFFFFF0000000000000000000000000000000000000000
       000000000000}
+  end
+  object SQLProcessor: TZSQLProcessor
+    Params = <>
+    Connection = Connection
+    Delimiter = ';'
+    CleanupStatements = True
+    Left = 364
+    Top = 225
   end
 end

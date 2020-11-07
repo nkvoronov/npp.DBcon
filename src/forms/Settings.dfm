@@ -4,8 +4,8 @@ object fmSettings: TfmSettings
   ActiveControl = btCancel
   BorderStyle = bsDialog
   Caption = 'Settings npp.DBcon'
-  ClientHeight = 222
-  ClientWidth = 351
+  ClientHeight = 255
+  ClientWidth = 512
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,30 +14,32 @@ object fmSettings: TfmSettings
   Font.Style = []
   OldCreateOrder = False
   Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   object pnButtons: TPanel
     Left = 0
-    Top = 192
-    Width = 351
+    Top = 225
+    Width = 512
     Height = 30
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 1
+    TabOrder = 2
     object btCancel: TButton
       AlignWithMargins = True
-      Left = 273
+      Left = 434
       Top = 3
       Width = 75
       Height = 24
       Align = alRight
-      Caption = #1054#1090#1084#1077#1085#1072
+      Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 1
     end
     object btOk: TButton
       AlignWithMargins = True
-      Left = 192
+      Left = 353
       Top = 3
       Width = 75
       Height = 24
@@ -47,20 +49,112 @@ object fmSettings: TfmSettings
       TabOrder = 0
     end
   end
-  object pcSettings: TPageControl
-    Left = 0
-    Top = 0
-    Width = 351
-    Height = 192
-    ActivePage = tsMain
-    Align = alClient
+  object gbConnections: TGroupBox
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
+    Width = 506
+    Height = 156
+    Align = alTop
+    Caption = 'Connections'
     TabOrder = 0
-    object tsMain: TTabSheet
-      Caption = 'Main'
+    object lbConnections: TCheckListBox
+      AlignWithMargins = True
+      Left = 5
+      Top = 18
+      Width = 496
+      Height = 97
+      OnClickCheck = lbConnectionsClickCheck
+      Align = alClient
+      BevelInner = bvNone
+      BevelOuter = bvNone
+      ItemHeight = 13
+      TabOrder = 0
+      OnDblClick = lbConnectionsDblClick
     end
-    object tsConnection: TTabSheet
-      Caption = 'Connection'
-      ImageIndex = 1
+    object pnEdtBtn: TPanel
+      AlignWithMargins = True
+      Left = 5
+      Top = 121
+      Width = 496
+      Height = 30
+      Align = alBottom
+      BevelOuter = bvNone
+      TabOrder = 1
+      object btAdd: TButton
+        AlignWithMargins = True
+        Left = 256
+        Top = 3
+        Width = 75
+        Height = 24
+        Align = alRight
+        Caption = 'Add'
+        TabOrder = 1
+        OnClick = btAddClick
+      end
+      object btDel: TButton
+        AlignWithMargins = True
+        Left = 418
+        Top = 3
+        Width = 75
+        Height = 24
+        Align = alRight
+        Caption = 'Delete'
+        TabOrder = 3
+        OnClick = btDelClick
+      end
+      object btTest: TButton
+        AlignWithMargins = True
+        Left = 3
+        Top = 3
+        Width = 75
+        Height = 24
+        Align = alLeft
+        Caption = 'Test'
+        TabOrder = 0
+        OnClick = btTestClick
+      end
+      object btEdit: TButton
+        AlignWithMargins = True
+        Left = 337
+        Top = 3
+        Width = 75
+        Height = 24
+        Align = alRight
+        Caption = 'Edit'
+        TabOrder = 2
+        OnClick = btEditClick
+      end
     end
+  end
+  object ckbShowListConnections: TCheckBox
+    Left = 8
+    Top = 165
+    Width = 137
+    Height = 17
+    Caption = 'Show List Connections'
+    TabOrder = 1
+  end
+  object ckbStartDefaultConnection: TCheckBox
+    Left = 8
+    Top = 188
+    Width = 145
+    Height = 17
+    Caption = 'Start Default Connection'
+    TabOrder = 3
+  end
+  object Connection: TZConnection
+    ControlsCodePage = cCP_UTF16
+    AutoEncodeStrings = True
+    Catalog = ''
+    SQLHourGlass = True
+    HostName = ''
+    Port = 0
+    Database = ''
+    User = ''
+    Password = ''
+    Protocol = ''
+    Left = 28
+    Top = 58
   end
 end
