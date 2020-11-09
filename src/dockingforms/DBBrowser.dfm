@@ -91,6 +91,10 @@ object fmDBBrowser: TfmDBBrowser
     TabOrder = 2
     object tsTree: TTabSheet
       Caption = 'Tree'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object spBottom: TSplitter
         AlignWithMargins = True
         Left = 3
@@ -148,6 +152,10 @@ object fmDBBrowser: TfmDBBrowser
     object tsTest: TTabSheet
       Caption = 'Test'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lbListMataDataType: TListBox
         AlignWithMargins = True
         Left = 3
@@ -212,7 +220,7 @@ object fmDBBrowser: TfmDBBrowser
     Left = 168
     Top = 400
     Bitmap = {
-      494C0101090048003C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010109004800480010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

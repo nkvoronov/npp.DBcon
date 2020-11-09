@@ -31,20 +31,21 @@ uses
   NppPlugin;
 
 type
-  TTypeItem = (tiNone, tiSchema, tiSchemaItem, tiTables, tiTablesItem, tiTablesColumn, tiTablesPrimaryKeys,
-  tiTablesForeginKeys, tiTablesChecks, tiTablesIndex, tiTablesTriggers, tiTablesColumnItem,
-  tiTablesPrimaryKeysItem, tiTablesForeginKeysItem, tiTablesChecksItem, tiTablesIndexItem,
-  tiTablesTriggersItem, tiProcedures, tiProceduresItem, tiProceduresColumn,
-  tiProceduresColumnItem, tiSequences, tiSequencesItem);
+  TTypeItem = (tiNone, tiSchema, tiSchemaItem, tiTables, tiTablesItem,
+    tiTablesColumn, tiTablesPrimaryKeys, tiTablesForeginKeys, tiTablesChecks,
+    tiTablesIndex, tiTablesTriggers, tiTablesColumnItem, tiTablesPrimaryKeysItem,
+    tiTablesForeginKeysItem, tiTablesChecksItem, tiTablesIndexItem,
+    tiTablesTriggersItem, tiProcedures, tiProceduresItem, tiProceduresColumn,
+    tiProceduresColumnItem, tiSequences, tiSequencesItem);
 
   TTreeItem = class
-    TypeItem : TTypeItem;
-    TypeMD : TZMetadataType;
-    Catalog : String;
-    Schema : String;
-    DBName : String;
-    Filter : String;
-    Sort : String;
+    TypeItem: TTypeItem;
+    TypeMD: TZMetadataType;
+    Catalog: string;
+    Schema: string;
+    DBName: string;
+    Filter: string;
+    Sort: string;
     constructor Create;
   end;
 
@@ -70,33 +71,42 @@ type
     procedure btConnectClick(Sender: TObject);
     procedure lbListMataDataTypeClick(Sender: TObject);
     procedure tvDBBrowserChange(Sender: TObject; Node: TTreeNode);
-    procedure tvDBBrowserExpanding(Sender: TObject; Node: TTreeNode;
-      var AllowExpansion: Boolean);
+    procedure tvDBBrowserExpanding(Sender: TObject; Node: TTreeNode; var
+      AllowExpansion: Boolean);
   private
     FShowSelect: Boolean;
     FStartDefCon: Boolean;
-    FCatalog: String;
+    FCatalog: string;
     FMenuItemCheck: TMenuItemCheck;
     procedure SetMenuItemCheck(const Value: TMenuItemCheck);
     procedure LoadSettings;
     procedure SetMetaDataList;
-    function GetMetaData(AType : TZMetadataType; ACatalog : String = ''; ASchema : String = ''; ADBName : String = ''; AFilter : String = ''; AUnique :Boolean = false; ASort : String = ''): TZSQLMetadata;
-    function GetCountMetaData(AType : TZMetadataType; ACatalog : String = ''; ASchema : String = ''; ADBName : String = ''; AFilter : String = ''; AUnique :Boolean = false): Integer;
+    function GetMetaData(AType: TZMetadataType; ACatalog: string = ''; ASchema:
+      string = ''; ADBName: string = ''; AFilter: string = ''; AUnique: Boolean
+      = false; ASort: string = ''): TZSQLMetadata;
+    function GetCountMetaData(AType: TZMetadataType; ACatalog: string = '';
+      ASchema: string = ''; ADBName: string = ''; AFilter: string = ''; AUnique:
+      Boolean = false): Integer;
     procedure CreateTMPNode(AParent: TTreeNode);
     procedure ClearTreeNodeData;
     procedure CreateTree;
     procedure SetCatalogs;
     procedure SetSchemas;
     procedure SetTypeTables(AParent: TTreeNode; ATi: TTreeItem);
-    procedure SetProcedures(AParent: TTreeNode; ATi: TTreeItem);
-    procedure SetSequences(AParent: TTreeNode; ATi: TTreeItem);
     procedure SetTablesItem(AParent: TTreeNode; ATi: TTreeItem);
     procedure SetProceduresItem(AParent: TTreeNode; ATi: TTreeItem);
-    procedure SetSequencesItem(AParent: TTreeNode; ATi: TTreeItem);
     procedure SetTablesContent(AParent: TTreeNode; ATi: TTreeItem);
     procedure SetTablesColumn(AParent: TTreeNode; ATi: TTreeItem);
+    procedure SetTablesPrimaryKey(AParent: TTreeNode; ATi: TTreeItem);
+    procedure SetTablesForeginKey(AParent: TTreeNode; ATi: TTreeItem);
+    procedure SetTablesCheck(AParent: TTreeNode; ATi: TTreeItem);
+    procedure SetTablesIndex(AParent: TTreeNode; ATi: TTreeItem);
+    procedure SetTablesTrigger(AParent: TTreeNode; ATi: TTreeItem);
+    procedure SetProcedures(AParent: TTreeNode; ATi: TTreeItem);
     procedure SetProceduresContent(AParent: TTreeNode; ATi: TTreeItem);
     procedure SetProceduresColumn(AParent: TTreeNode; ATi: TTreeItem);
+    procedure SetSequences(AParent: TTreeNode; ATi: TTreeItem);
+    procedure SetSequencesItem(AParent: TTreeNode; ATi: TTreeItem);
     function SetTreeList(Node: TTreeNode): Boolean;
     procedure SetTableInfo(Node: TTreeNode);
   public
@@ -123,16 +133,17 @@ end;
 
 procedure TfmDBBrowser.SetCatalogs;
 var
-  md : TZSQLMetadata;
-  count : Integer;
-  Catalogs : TStringList;
+  md: TZSQLMetadata;
+  count: Integer;
+  Catalogs: TStringList;
 begin
   Catalogs := TStringList.Create;
   try
     Connection.GetCatalogNames(Catalogs);
     if Catalogs.Count > 0 then
       FCatalog := GetConnection(cbConnection.Items, false, cbConnection.ItemIndex).DataBase
-    else FCatalog := '';
+    else
+      FCatalog := '';
   finally
     Catalogs.Free;
   end;
@@ -140,11 +151,11 @@ end;
 
 procedure TfmDBBrowser.SetSchemas;
 var
- md : TZSQLMetadata;
- ASchema, Filter : String;
- Node, Parent : TTreeNode;
- count : Integer;
- ti : TTreeItem;
+  md: TZSQLMetadata;
+  ASchema, Filter: string;
+  Node, Parent: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
 begin
   md := GetMetaData(mdSchemas, '', '', '', '', true, 'TABLE_SCHEM');
   try
@@ -156,7 +167,8 @@ begin
       ti.TypeItem := tiSchema;
       ti.TypeMD := mdSchemas;
       ti.Catalog := FCatalog;
-      Parent := tvDBBrowser.Items.AddChildObject(nil, 'schema (' + IntToStr(count) + ')', Pointer(ti));
+      Parent := tvDBBrowser.Items.AddChildObject(nil, 'schema (' + IntToStr(count)
+        + ')', Pointer(ti));
       md.First;
       while not md.Eof do
       begin
@@ -174,7 +186,8 @@ begin
         md.Next;
       end;
       Parent.Expand(false);
-    end else
+    end
+    else
     begin
       SetTypeTables(nil, nil);
       SetProcedures(nil, nil);
@@ -187,14 +200,16 @@ end;
 
 procedure TfmDBBrowser.SetTypeTables(AParent: TTreeNode; ATi: TTreeItem);
 var
- md : TZSQLMetadata;
- ATableType, AFilter, ASchema : String;
- Node : TTreeNode;
- count : Integer;
- ti : TTreeItem;
+  md: TZSQLMetadata;
+  ATableType, AFilter, ASchema: string;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
 begin
-  if ATi <> nil then ASchema := ATi.Schema
-  else ASchema := '';
+  if ATi <> nil then
+    ASchema := ATi.Schema
+  else
+    ASchema := '';
 
   md := GetMetaData(mdTableTypes, '', '', '', '', true, 'TABLE_TYPE');
   try
@@ -215,7 +230,8 @@ begin
         ti.DBName := ATableType;
         ti.Filter := AFilter;
         ti.Sort := 'TABLE_NAME';
-        Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(ATableType) + ' (' + IntToStr(count) + ')', Pointer(ti));
+        Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(ATableType)
+          + ' (' + IntToStr(count) + ')', Pointer(ti));
         CreateTMPNode(Node);
       end;
       md.Next;
@@ -227,13 +243,14 @@ end;
 
 procedure TfmDBBrowser.SetTablesItem(AParent: TTreeNode; ATi: TTreeItem);
 var
- md : TZSQLMetadata;
- ATableName, AFilter : String;
- Node : TTreeNode;
- count : Integer;
- ti : TTreeItem;
+  md: TZSQLMetadata;
+  ATableName, AFilter: string;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
 begin
-  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter, true, ATi.Sort);
+  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter,
+    true, ATi.Sort);
   try
     md.Open;
     md.First;
@@ -248,7 +265,8 @@ begin
       ti.Schema := ATi.Schema;
       ti.DBName := ATableName;
       ti.Filter := AFilter;
-      Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(ATableName), Pointer(ti));
+      Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(ATableName),
+        Pointer(ti));
       CreateTMPNode(Node);
       md.Next;
     end;
@@ -259,14 +277,15 @@ end;
 
 procedure TfmDBBrowser.SetTablesContent(AParent: TTreeNode; ATi: TTreeItem);
 var
- Node : TTreeNode;
- count : Integer;
- ti : TTreeItem;
- Filter :String;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
+  Filter: string;
 begin
   // Columns
   try
-    count := GetCountMetaData(mdColumns, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter, true);
+    count := GetCountMetaData(mdColumns, ATi.Catalog, ATi.Schema, ATi.DBName,
+      ATi.Filter, false);
     if count > 0 then
     begin
       ti := TTreeItem.Create;
@@ -277,7 +296,8 @@ begin
       ti.Filter := ATi.Filter;
       ti.DBName := ATi.DBName;
       ti.Sort := 'ORDINAL_POSITION';
-      Node := tvDBBrowser.Items.AddChildObject(AParent, 'column (' + IntToStr(count) + ')', Pointer(ti));
+      Node := tvDBBrowser.Items.AddChildObject(AParent, 'column (' + IntToStr(count)
+        + ')', Pointer(ti));
       CreateTMPNode(Node);
     end;
   except
@@ -285,7 +305,8 @@ begin
   end;
   // Primary Keys
   try
-    count := GetCountMetaData(mdPrimaryKeys, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter, true);
+    count := GetCountMetaData(mdPrimaryKeys, ATi.Catalog, ATi.Schema, ATi.DBName,
+      ATi.Filter, false);
     if count > 0 then
     begin
       ti := TTreeItem.Create;
@@ -295,8 +316,9 @@ begin
       ti.Schema := ATi.Schema;
       ti.Filter := ATi.Filter;
       ti.DBName := ATi.DBName;
-      ti.Sort := '';
-      Node := tvDBBrowser.Items.AddChildObject(AParent, 'primary key (' + IntToStr(count) + ')', Pointer(ti));
+      ti.Sort := 'PK_NAME';
+      Node := tvDBBrowser.Items.AddChildObject(AParent, 'primary key (' +
+        IntToStr(count) + ')', Pointer(ti));
       CreateTMPNode(Node);
     end;
   except
@@ -305,7 +327,8 @@ begin
   // Foregin Keys
   try
     Filter := '';
-    count := GetCountMetaData(mdImportedKeys, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter, true);
+    count := GetCountMetaData(mdImportedKeys, ATi.Catalog, ATi.Schema, ATi.DBName,
+      ATi.Filter, false);
     if count > 0 then
     begin
       ti := TTreeItem.Create;
@@ -316,7 +339,8 @@ begin
       ti.Filter := Filter;
       ti.DBName := ATi.DBName;
       ti.Sort := '';
-      Node := tvDBBrowser.Items.AddChildObject(AParent, 'foreign key (' + IntToStr(count) + ')', Pointer(ti));
+      Node := tvDBBrowser.Items.AddChildObject(AParent, 'foreign key (' +
+        IntToStr(count) + ')', Pointer(ti));
       CreateTMPNode(Node);
     end;
   except
@@ -324,7 +348,8 @@ begin
   end;
   // Checks
   try
-    count := GetCountMetaData(mdExportedKeys, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter, true);
+    count := GetCountMetaData(mdExportedKeys, ATi.Catalog, ATi.Schema, ATi.DBName,
+      ATi.Filter, false);
     if count > 0 then
     begin
       ti := TTreeItem.Create;
@@ -335,7 +360,8 @@ begin
       ti.Filter := ATi.Filter;
       ti.DBName := ATi.DBName;
       ti.Sort := '';
-      Node := tvDBBrowser.Items.AddChildObject(AParent, 'check (' + IntToStr(count) + ')', Pointer(ti));
+      Node := tvDBBrowser.Items.AddChildObject(AParent, 'check (' + IntToStr(count)
+        + ')', Pointer(ti));
       CreateTMPNode(Node);
     end;
   except
@@ -343,7 +369,8 @@ begin
   end;
   //  Index
   try
-    count := GetCountMetaData(mdIndexInfo, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter, true);
+    count := GetCountMetaData(mdIndexInfo, ATi.Catalog, ATi.Schema, ATi.DBName,
+      ATi.Filter, false);
     if count > 0 then
     begin
       ti := TTreeItem.Create;
@@ -353,8 +380,9 @@ begin
       ti.Schema := ATi.Schema;
       ti.Filter := ATi.Filter;
       ti.DBName := ATi.DBName;
-      ti.Sort := '';
-      Node := tvDBBrowser.Items.AddChildObject(AParent, 'index (' + IntToStr(count) + ')', Pointer(ti));
+      ti.Sort := 'INDEX_NAME';
+      Node := tvDBBrowser.Items.AddChildObject(AParent, 'index (' + IntToStr(count)
+        + ')', Pointer(ti));
       CreateTMPNode(Node);
     end;
   except
@@ -363,7 +391,8 @@ begin
   // Triggers
   try
     Filter := '';
-    count := GetCountMetaData(mdTriggers, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter, true);
+    count := GetCountMetaData(mdTriggers, ATi.Catalog, ATi.Schema, ATi.DBName,
+      ATi.Filter, false);
     if count > 0 then
     begin
       ti := TTreeItem.Create;
@@ -373,8 +402,9 @@ begin
       ti.Schema := ATi.Schema;
       ti.Filter := Filter;
       ti.DBName := ATi.DBName;
-      ti.Sort := '';
-      Node := tvDBBrowser.Items.AddChildObject(AParent, 'trigger (' + IntToStr(count) + ')', Pointer(ti));
+      ti.Sort := 'TRIGGER_NAME';
+      Node := tvDBBrowser.Items.AddChildObject(AParent, 'trigger (' + IntToStr(count)
+        + ')', Pointer(ti));
       CreateTMPNode(Node);
     end;
   except
@@ -384,13 +414,14 @@ end;
 
 procedure TfmDBBrowser.SetTablesColumn(AParent: TTreeNode; ATi: TTreeItem);
 var
- md : TZSQLMetadata;
- AColumnName, AFilter : String;
- Node : TTreeNode;
- count : Integer;
- ti : TTreeItem;
+  md: TZSQLMetadata;
+  AColumnName, AFilter: string;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
 begin
-  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter, true, ATi.Sort);
+  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter,
+    false, ATi.Sort);
   try
     md.Open;
     md.First;
@@ -405,7 +436,8 @@ begin
       ti.Schema := ATi.Schema;
       ti.DBName := ATi.DBName;
       ti.Filter := AFilter;
-      Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(AColumnName), Pointer(ti));
+      Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(AColumnName),
+        Pointer(ti));
       md.Next;
     end;
   finally
@@ -413,18 +445,144 @@ begin
   end;
 end;
 
+procedure TfmDBBrowser.SetTablesPrimaryKey(AParent: TTreeNode; ATi: TTreeItem);
+var
+  md: TZSQLMetadata;
+  APKName, AFilter: string;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
+  pkNames : TStringList;
+begin
+  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter,
+    false, ATi.Sort);
+  pkNames := TStringList.Create;
+  try
+    md.Open;
+    md.First;
+    while not md.Eof do
+    begin
+      APKName := md.FieldByName('PK_NAME').AsString;
+      if Trim(APKName) = '' Then APKName := 'NO NAME';
+      AFilter := '';
+      ti := TTreeItem.Create;
+      ti.TypeItem := tiTablesPrimaryKeysItem;
+      ti.TypeMD := ATi.TypeMD;
+      ti.Catalog := ATi.Catalog;
+      ti.Schema := ATi.Schema;
+      ti.DBName := ATi.DBName;
+      ti.Filter := AFilter;
+      if pkNames.IndexOf(APKName) = -1 then
+      begin
+        Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(APKName),
+          Pointer(ti));
+        pkNames.Add(APKName)
+      end;
+      md.Next;
+    end;
+  finally
+    pkNames.Free;
+    md.Free;
+  end;
+end;
+
+procedure TfmDBBrowser.SetTablesForeginKey(AParent: TTreeNode; ATi: TTreeItem);
+begin
+  //
+end;
+
+procedure TfmDBBrowser.SetTablesCheck(AParent: TTreeNode; ATi: TTreeItem);
+begin
+  //
+end;
+
+procedure TfmDBBrowser.SetTablesIndex(AParent: TTreeNode; ATi: TTreeItem);
+var
+  md: TZSQLMetadata;
+  AIndexName, AFilter: string;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
+  IndexNames : TStringList;
+begin
+  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter,
+    false, ATi.Sort);
+  IndexNames := TStringList.Create;
+  try
+    md.Open;
+    md.First;
+    while not md.Eof do
+    begin
+      AIndexName := md.FieldByName('INDEX_NAME').AsString;
+      if Trim(AIndexName) = '' Then AIndexName := 'NO NAME';
+      AFilter := '';
+      ti := TTreeItem.Create;
+      ti.TypeItem := tiTablesPrimaryKeysItem;
+      ti.TypeMD := ATi.TypeMD;
+      ti.Catalog := ATi.Catalog;
+      ti.Schema := ATi.Schema;
+      ti.DBName := ATi.DBName;
+      ti.Filter := AFilter;
+      if IndexNames.IndexOf(AIndexName) = -1 then
+      begin
+        Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(AIndexName),
+          Pointer(ti));
+        IndexNames.Add(AIndexName)
+      end;
+      md.Next;
+    end;
+  finally
+    IndexNames.Free;
+    md.Free;
+  end;
+end;
+
+procedure TfmDBBrowser.SetTablesTrigger(AParent: TTreeNode; ATi: TTreeItem);
+var
+  md: TZSQLMetadata;
+  ATriggerName, AFilter: string;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
+begin
+  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter,
+    false, ATi.Sort);
+  try
+    md.Open;
+    md.First;
+    while not md.Eof do
+    begin
+      ATriggerName := md.FieldByName('TRIGGER_NAME').AsString;
+      AFilter := '';
+      ti := TTreeItem.Create;
+      ti.TypeItem := tiTablesTriggersItem;
+      ti.TypeMD := ATi.TypeMD;
+      ti.Catalog := ATi.Catalog;
+      ti.Schema := ATi.Schema;
+      ti.DBName := ATi.DBName;
+      ti.Filter := AFilter;
+      Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(ATriggerName),
+        Pointer(ti));
+      md.Next;
+    end;
+  finally
+    md.Free;
+  end;
+end;
 
 procedure TfmDBBrowser.SetProcedures(AParent: TTreeNode; ATi: TTreeItem);
 var
- Node : TTreeNode;
- count : Integer;
- ti : TTreeItem;
- ASchema : String;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
+  ASchema: string;
 begin
-  if ATi <> nil then ASchema := ATi.Schema
-  else ASchema := '';
+  if ATi <> nil then
+    ASchema := ATi.Schema
+  else
+    ASchema := '';
 
-  count := GetCountMetaData(mdProcedures, FCatalog, ASchema, '', '', true);
+  count := GetCountMetaData(mdProcedures, FCatalog, ASchema, '', '', false);
   if count > 0 then
   begin
     ti := TTreeItem.Create;
@@ -433,20 +591,22 @@ begin
     ti.Catalog := FCatalog;
     ti.Schema := ASchema;
     ti.Sort := 'PROCEDURE_NAME';
-    Node := tvDBBrowser.Items.AddChildObject(AParent, 'procedure (' + IntToStr(count) + ')', Pointer(ti));
+    Node := tvDBBrowser.Items.AddChildObject(AParent, 'procedure (' + IntToStr(count)
+      + ')', Pointer(ti));
     CreateTMPNode(Node);
   end;
 end;
 
 procedure TfmDBBrowser.SetProceduresItem(AParent: TTreeNode; ATi: TTreeItem);
 var
- md : TZSQLMetadata;
- AProcedureName, AFilter : String;
- Node : TTreeNode;
- count : Integer;
- ti : TTreeItem;
+  md: TZSQLMetadata;
+  AProcedureName, AFilter: string;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
 begin
-  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, Ati.DBName, ATi.Filter, true, ATi.Sort);
+  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter,
+    false, ATi.Sort);
   try
     md.Open;
     md.First;
@@ -461,7 +621,8 @@ begin
       ti.Schema := ATi.Schema;
       ti.DBName := AProcedureName;
       ti.Filter := AFilter;
-      Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(AProcedureName), Pointer(ti));
+      Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(AProcedureName),
+        Pointer(ti));
       CreateTMPNode(Node);
       md.Next;
     end;
@@ -472,13 +633,14 @@ end;
 
 procedure TfmDBBrowser.SetProceduresContent(AParent: TTreeNode; ATi: TTreeItem);
 var
- Node : TTreeNode;
- count : Integer;
- ti : TTreeItem;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
 begin
   // Columns
   try
-    count := GetCountMetaData(mdProcedureColumns, ATi.Catalog, Ati.Schema, Ati.DBName, ATi.Filter, true);
+    count := GetCountMetaData(mdProcedureColumns, ATi.Catalog, ATi.Schema, ATi.DBName,
+      ATi.Filter, false);
     if count > 0 then
     begin
       ti := TTreeItem.Create;
@@ -486,10 +648,11 @@ begin
       ti.TypeMD := mdProcedureColumns;
       ti.Catalog := ATi.Catalog;
       ti.Schema := ATi.Schema;
-      ti.DBName := Ati.DBName;
+      ti.DBName := ATi.DBName;
       ti.Filter := ATi.Filter;
       ti.Sort := 'COLUMN_TYPE';
-      Node := tvDBBrowser.Items.AddChildObject(AParent, 'column (' + IntToStr(count) + ')', Pointer(ti));
+      Node := tvDBBrowser.Items.AddChildObject(AParent, 'column (' + IntToStr(count)
+        + ')', Pointer(ti));
       CreateTMPNode(Node);
     end;
   except
@@ -499,13 +662,14 @@ end;
 
 procedure TfmDBBrowser.SetProceduresColumn(AParent: TTreeNode; ATi: TTreeItem);
 var
- md : TZSQLMetadata;
- AColumnName, AFilter : String;
- Node : TTreeNode;
- count : Integer;
- ti : TTreeItem;
+  md: TZSQLMetadata;
+  AColumnName, AFilter: string;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
 begin
-  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, Ati.DBName, ATi.Filter, true, ATi.Sort);
+  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter,
+    false, ATi.Sort);
   try
     md.Open;
     md.First;
@@ -518,9 +682,10 @@ begin
       ti.TypeMD := ATi.TypeMD;
       ti.Catalog := ATi.Catalog;
       ti.Schema := ATi.Schema;
-      ti.DBName := Ati.DBName;
+      ti.DBName := ATi.DBName;
       ti.Filter := AFilter;
-      Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(AColumnName), Pointer(ti));
+      Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(AColumnName),
+        Pointer(ti));
       md.Next;
     end;
   finally
@@ -530,15 +695,17 @@ end;
 
 procedure TfmDBBrowser.SetSequences(AParent: TTreeNode; ATi: TTreeItem);
 var
- Node : TTreeNode;
- count : Integer;
- ti : TTreeItem;
- ASchema : String;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
+  ASchema: string;
 begin
-  if ATi <> nil then ASchema := ATi.Schema
-  else ASchema := '';
+  if ATi <> nil then
+    ASchema := ATi.Schema
+  else
+    ASchema := '';
 
-  count := GetCountMetaData(mdSequences, FCatalog, ASchema, '', '', true);
+  count := GetCountMetaData(mdSequences, FCatalog, ASchema, '', '', false);
   if count > 0 then
   begin
     ti := TTreeItem.Create;
@@ -547,20 +714,22 @@ begin
     ti.Catalog := FCatalog;
     ti.Schema := ASchema;
     ti.Sort := 'SEQUENCE_NAME';
-    Node := tvDBBrowser.Items.AddChildObject(AParent, 'sequence (' + IntToStr(count) + ')', Pointer(ti));
+    Node := tvDBBrowser.Items.AddChildObject(AParent, 'sequence (' + IntToStr(count)
+      + ')', Pointer(ti));
     CreateTMPNode(Node);
   end;
 end;
 
 procedure TfmDBBrowser.SetSequencesItem(AParent: TTreeNode; ATi: TTreeItem);
 var
- md : TZSQLMetadata;
- ASequenceName, AFilter : String;
- Node : TTreeNode;
- count : Integer;
- ti : TTreeItem;
+  md: TZSQLMetadata;
+  ASequenceName, AFilter: string;
+  Node: TTreeNode;
+  count: Integer;
+  ti: TTreeItem;
 begin
-  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, Ati.DBName, ATi.Filter, true, ATi.Sort);
+  md := GetMetaData(ATi.TypeMD, ATi.Catalog, ATi.Schema, ATi.DBName, ATi.Filter,
+    false, ATi.Sort);
   try
     md.Open;
     md.First;
@@ -575,7 +744,8 @@ begin
       ti.Schema := ATi.Schema;
       ti.DBName := ASequenceName;
       ti.Filter := AFilter;
-      Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(ASequenceName), Pointer(ti));
+      Node := tvDBBrowser.Items.AddChildObject(AParent, LowerCase(ASequenceName),
+        Pointer(ti));
       md.Next;
     end;
   finally
@@ -591,8 +761,8 @@ end;
 
 function TfmDBBrowser.SetTreeList(Node: TTreeNode): Boolean;
 var
-  FirstNode : TTreeNode;
-  ti : TTreeItem;
+  FirstNode: TTreeNode;
+  ti: TTreeItem;
 begin
   Result := True;
   FirstNode := Node.GetFirstChild;
@@ -603,29 +773,51 @@ begin
     try
       if ti <> nil then
       begin
-        if ti.TypeItem in [tiTables, tiTablesItem, tiTablesColumn, tiProcedures,
-        tiProceduresItem, tiProceduresColumn, tiSequences] then tvDBBrowser.Items.Delete(FirstNode);
+        if ti.TypeItem in [tiTables, tiTablesItem, tiTablesColumn, tiTablesPrimaryKeys,
+        tiTablesIndex, tiTablesTriggers, tiProcedures, tiProceduresItem, tiProceduresColumn,
+        tiSequences] then
+          tvDBBrowser.Items.Delete(FirstNode);
         case ti.TypeItem of
-          tiTables: SetTablesItem(Node, ti);
-          tiTablesItem: SetTablesContent(Node, ti);
-          tiTablesColumn: SetTablesColumn(Node, ti);
-          tiTablesPrimaryKeys: Result := False;
-          tiTablesForeginKeys: Result := False;
-          tiTablesChecks: Result := False;
-          tiTablesIndex: Result := False;
-          tiTablesTriggers: Result := False;
-          tiTablesColumnItem: Result := False;
-          tiTablesPrimaryKeysItem: Result := False;
-          tiTablesForeginKeysItem: Result := False;
-          tiTablesChecksItem: Result := False;
-          tiTablesIndexItem: Result := False;
-          tiTablesTriggersItem: Result := False;
-          tiProcedures: SetProceduresItem(Node, ti);
-          tiProceduresItem: SetProceduresContent(Node, ti);
-          tiProceduresColumn: SetProceduresColumn(Node, ti);
-          tiProceduresColumnItem: Result := False;
-          tiSequences: SetSequencesItem(Node, ti);
-          tiSequencesItem: Result := False;
+          tiTables:
+            SetTablesItem(Node, ti);
+          tiTablesItem:
+            SetTablesContent(Node, ti);
+          tiTablesColumn:
+            SetTablesColumn(Node, ti);
+          tiTablesPrimaryKeys:
+            SetTablesPrimaryKey(Node, ti);
+          tiTablesForeginKeys:
+            Result := False;
+          tiTablesChecks:
+            Result := False;
+          tiTablesIndex:
+            SetTablesIndex(Node, ti);
+          tiTablesTriggers:
+            SetTablesTrigger(Node, ti);
+          tiTablesColumnItem:
+            Result := False;
+          tiTablesPrimaryKeysItem:
+            Result := False;
+          tiTablesForeginKeysItem:
+            Result := False;
+          tiTablesChecksItem:
+            Result := False;
+          tiTablesIndexItem:
+            Result := False;
+          tiTablesTriggersItem:
+            Result := False;
+          tiProcedures:
+            SetProceduresItem(Node, ti);
+          tiProceduresItem:
+            SetProceduresContent(Node, ti);
+          tiProceduresColumn:
+            SetProceduresColumn(Node, ti);
+          tiProceduresColumnItem:
+            Result := False;
+          tiSequences:
+            SetSequencesItem(Node, ti);
+          tiSequencesItem:
+            Result := False;
         end;
       end;
     finally
@@ -641,40 +833,62 @@ end;
 
 procedure TfmDBBrowser.SetTableInfo(Node: TTreeNode);
 var
-  ti : TTreeItem;
+  ti: TTreeItem;
 begin
   ti := TTreeItem(Node.Data);
   if ti <> nil then
-  case ti.TypeItem of
-    tiSchema: ;
-    tiSchemaItem: ;
-    tiTables: ;
-    tiTablesItem: ;
-    tiTablesColumn: ;
-    tiTablesPrimaryKeys: ;
-    tiTablesForeginKeys: ;
-    tiTablesChecks: ;
-    tiTablesIndex: ;
-    tiTablesTriggers: ;
-    tiTablesColumnItem: ;
-    tiTablesPrimaryKeysItem: ;
-    tiTablesForeginKeysItem: ;
-    tiTablesChecksItem: ;
-    tiTablesIndexItem: ;
-    tiTablesTriggersItem: ;
-    tiProcedures: ;
-    tiProceduresItem: ;
-    tiProceduresColumn: ;
-    tiProceduresColumnItem: ;
-    tiSequences: ;
-    tiSequencesItem: ;
-  end;
+    case ti.TypeItem of
+      tiSchema:
+        ;
+      tiSchemaItem:
+        ;
+      tiTables:
+        ;
+      tiTablesItem:
+        ;
+      tiTablesColumn:
+        ;
+      tiTablesPrimaryKeys:
+        ;
+      tiTablesForeginKeys:
+        ;
+      tiTablesChecks:
+        ;
+      tiTablesIndex:
+        ;
+      tiTablesTriggers:
+        ;
+      tiTablesColumnItem:
+        ;
+      tiTablesPrimaryKeysItem:
+        ;
+      tiTablesForeginKeysItem:
+        ;
+      tiTablesChecksItem:
+        ;
+      tiTablesIndexItem:
+        ;
+      tiTablesTriggersItem:
+        ;
+      tiProcedures:
+        ;
+      tiProceduresItem:
+        ;
+      tiProceduresColumn:
+        ;
+      tiProceduresColumnItem:
+        ;
+      tiSequences:
+        ;
+      tiSequencesItem:
+        ;
+    end;
 end;
 
 procedure TfmDBBrowser.ClearTreeNodeData;
 var
-  i : Integer;
-  ti : TTreeItem;
+  i: Integer;
+  ti: TTreeItem;
 begin
   for i := 0 to tvDBBrowser.Items.Count - 1 do
   begin
@@ -692,7 +906,7 @@ end;
 
 procedure TfmDBBrowser.CreateTree;
 var
-  OldCursor : TCursor;
+  OldCursor: TCursor;
 begin
   tvDBBrowser.Items.BeginUpdate;
   Connection.SQLHourGlass := false;
@@ -729,54 +943,99 @@ begin
   DoDisconnect(Connection);
 end;
 
-function TfmDBBrowser.GetCountMetaData(AType : TZMetadataType; ACatalog : String; ASchema : String; ADBName : String; AFilter : String; AUnique :Boolean): Integer;
+function TfmDBBrowser.GetCountMetaData(AType: TZMetadataType; ACatalog: string;
+  ASchema: string; ADBName: string; AFilter: string; AUnique: Boolean): Integer;
 var
-  md : TZSQLMetadata;
+  md: TZSQLMetadata;
+  AName, FieldName : String;
+  ListNames : TStringList;
 begin
   Result := 0;
-  md := GetMetaData(AType,ACatalog, ASchema, ADBName, AFilter, true);
+  md := GetMetaData(AType, ACatalog, ASchema, ADBName, AFilter, AUnique);
+  ListNames := TStringList.Create;
   try
     md.Open;
-    Result := md.RecordCount;
+    if AType in [mdPrimaryKeys, mdIndexInfo] then
+    begin
+      md.First;
+      case AType of
+        mdPrimaryKeys:FieldName := 'PK_NAME';
+        mdIndexInfo:FieldName := 'INDEX_NAME';
+      end;
+      while not md.Eof do
+      begin
+        AName := md.FieldByName(FieldName).AsString;
+        if Trim(AName) = '' Then AName := 'NO NAME';
+        if ListNames.IndexOf(AName) = -1 then ListNames.Add(AName);
+        md.Next;
+      end;
+      Result := ListNames.Count;
+    end
+    else Result := md.RecordCount;
   finally
+    ListNames.Free;
     md.Free
   end;
 end;
 
-function TfmDBBrowser.GetMetaData(AType : TZMetadataType; ACatalog : String; ASchema : String; ADBName : String; AFilter : String; AUnique :Boolean; ASort : String): TZSQLMetadata;
+function TfmDBBrowser.GetMetaData(AType: TZMetadataType; ACatalog: string;
+  ASchema: string; ADBName: string; AFilter: string; AUnique: Boolean; ASort:
+  string): TZSQLMetadata;
 begin
   Result := TZSQLMetadata.Create(self);
   try
     Result.Connection := Connection;
     Result.MetadataType := AType;
     if ADBName <> '' then
-    case AType of
-      mdProcedures : Result.ProcedureName := ADBName;
-      mdProcedureColumns : Result.ProcedureName := ADBName;
-      mdTables : ;
-      mdSchemas : ;
-      mdCatalogs : ;
-      mdTableTypes : ;
-      mdColumns : Result.TableName := ADBName;
-      mdColumnPrivileges : Result.TableName := ADBName;
-      mdTablePrivileges : Result.TableName := ADBName;
-      mdBestRowIdentifier :;
-      mdVersionColumns :;
-      mdPrimaryKeys : Result.TableName := ADBName;
-      mdImportedKeys : Result.TableName := ADBName;
-      mdExportedKeys : Result.TableName := ADBName;
-      mdCrossReference : Result.TableName := ADBName;
-      mdTypeInfo : ;
-      mdTriggers : Result.TableName := ADBName;
-      mdIndexInfo : Result.TableName := ADBName;
-      mdSequences : Result.SequenceName := ADBName;
-      mdUserDefinedTypes : ;
-    end;
+      case AType of
+        mdProcedures:
+          Result.ProcedureName := ADBName;
+        mdProcedureColumns:
+          Result.ProcedureName := ADBName;
+        mdTables:
+          ;
+        mdSchemas:
+          ;
+        mdCatalogs:
+          ;
+        mdTableTypes:
+          ;
+        mdColumns:
+          Result.TableName := ADBName;
+        mdColumnPrivileges:
+          Result.TableName := ADBName;
+        mdTablePrivileges:
+          Result.TableName := ADBName;
+        mdBestRowIdentifier:
+          ;
+        mdVersionColumns:
+          ;
+        mdPrimaryKeys:
+          Result.TableName := ADBName;
+        mdImportedKeys:
+          Result.TableName := ADBName;
+        mdExportedKeys:
+          Result.TableName := ADBName;
+        mdCrossReference:
+          Result.TableName := ADBName;
+        mdTypeInfo:
+          ;
+        mdTriggers:
+          Result.TableName := ADBName;
+        mdIndexInfo:
+          Result.TableName := ADBName;
+        mdSequences:
+          Result.SequenceName := ADBName;
+        mdUserDefinedTypes:
+          ;
+      end;
     if ASchema <> '' then
     begin
       Result.Schema := ASchema;
       Result.Catalog := '';
-    end else Result.Catalog := ACatalog;
+    end
+    else
+      Result.Catalog := ACatalog;
     if ASort <> '' then
       Result.SortedFields := ASort;
     if AFilter <> '' then
@@ -792,7 +1051,7 @@ end;
 
 procedure TfmDBBrowser.lbListMataDataTypeClick(Sender: TObject);
 var
-  index : Integer;
+  index: Integer;
 begin
   index := lbListMataDataType.ItemIndex;
   MetaData.Close;
@@ -810,7 +1069,7 @@ end;
 
 procedure TfmDBBrowser.SelItem;
 begin
-  if MenuItemCheck  = miShown then
+  if MenuItemCheck = miShown then
   begin
     Hide;
     MenuItemCheck := miHidden;
@@ -917,4 +1176,5 @@ end.
 //    md.Free;
 //  end;
 //end;
+
 
